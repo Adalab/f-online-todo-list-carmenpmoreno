@@ -1,0 +1,12 @@
+.hidden {
+    display: none;
+}
+.todo-section {
+    border: red 2px solid;
+}
+.doing-section {
+    border: rgb(197, 101, 45) 2px solid;
+}
+.done-section {
+    border: rgb(22, 175, 22) 2px solid;
+}
