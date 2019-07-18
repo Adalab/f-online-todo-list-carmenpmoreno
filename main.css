@@ -10,3 +10,6 @@
 .done-section {
     border: rgb(22, 175, 22) 2px solid;
 }
+.done-section__label {
+    text-decoration: line-through;
+}
