@@ -1,30 +1,21 @@
 const task = {
     todo: [
-        // {
-        //     text: "Tarea ejemplo 1",
-        //     checked: "false"
-        // },
-        // {
-        //     text: "Tarea ejemplo array.todo",
-        //     checked: "false"
-        // }
+        {
+            text: "Tarea ejemplo array.todo",
+            checked: "false"
+        }
     ],
     doing: [
-        // {
-        //     text: "Tarea ejemplo 2",
-        //     checked: "false"
-        // },
-        // {
-        //     text: "Tarea ejemplo array.doig",
-        //     checked: "false"
-        // },
-
+        {
+            text: "Tarea ejemplo array.doig",
+            checked: "false"
+        },
     ],
     done: [
-        // {
-        //     text: "Tarea ejemplo array.done",
-        //     checked: "true"
-        // }
+        {
+            text: "Tarea ejemplo array.done",
+            checked: "true"
+        }
     ],
 };
 const todoSection = document.querySelector('.todo-section');
@@ -46,55 +37,51 @@ todoSectionLabel.addEventListener('click', completeTaskTodo);
 function completeTaskDoing(event) {
 
     const eventText = event.currentTarget.innerText;
-    console.log(taskDone)
-    pushAndPaintDoneTasks(event.currentTarget.innerText);
+
+    pushDoneTasks(event.currentTarget.innerText);
+    itemChecked = true
+    paintTasks(doneSection, eventText, 'done-section__label', itemChecked);
 
     event.currentTarget.classList.add('hidden');
-    filterTaskArrays(taskDoing, doingSection, 'doing-section__label', eventText);
+    // probando a sustituir label de sección en vez de ocultar ....
+    // console.dir(doingSection.innerText);
+    // paintingLabelNode(eventText, doingSection);
+
+    filterandPaintTaskArrays(taskDoing, doingSection, 'doing-section__label', eventText);
 
 }
 function completeTaskTodo(event) {
 
     const eventText = event.currentTarget.innerText;
 
-    pushAndPaintDoneTasks(event.currentTarget.innerText);
+    pushDoneTasks(event.currentTarget.innerText);
+    itemChecked = true
+    paintTasks(doneSection, eventText, 'done-section__label', itemChecked);
 
     event.currentTarget.classList.add('hidden');
-    filterTaskArrays(taskTodo, todoSection, 'todo-section__label', eventText);
+    filterandPaintTaskArrays(taskTodo, todoSection, 'todo-section__label', eventText);
 }
 
+// generic function to change label text
+function paintingLabelNode(text, section) {
 
-// función que pushea tasks al array "todo" y lo pinta
-function pushAndPaintDoneTasks(taskText) {
-    const eventTaskObject = {
-        text: taskText,
-        checked: "true"
-    }
-
-    taskDone.push(eventTaskObject);
-    console.log(taskDone);
-    taskDone.map(item => {
-        paintTasks(doneSection, item.text, 'done-section__label', item.checked);
-    })
+    let newTextnode = document.createTextNode(text);
+    actualTextnode = section.lastChild;
+    section.replaceChild(newTextnode, actualTextnode);
 }
 
 // función que filtra arrays task doing y todo y los pinta de nuevo
-function filterTaskArrays(arrayTask, section, labelClass, eventText) {
+function filterandPaintTaskArrays(arrayTask, section, labelClass, eventText) {
     const taskFiltered = arrayTask
         .filter(item => item.text !== eventText);
     console.log(taskFiltered);
-    // taskFiltered.map(item => {
-    //     paintTasks(section, item.text, labelClass);
-    // })
+    taskFiltered.map(item => {
+        paintTasks(section, item.text, labelClass);
+    })
 }
 
-// función que sustituye los label con arrays dentro de task
+// función que pinta tasks en un un label/input de la sección indicada, con el atributo checked a true si se indica
 function paintTasks(section, node, labelClass, itemChecked) {
-    // detectando hijos actuales de sección para poder sustituirlos
-    console.dir(section);
-    const currentContent = section.children;
-    console.log(currentContent);
-    // ..................
 
     const labelSelector = document.createElement('label');
     const inputSelector = document.createElement('input');
@@ -105,24 +92,27 @@ function paintTasks(section, node, labelClass, itemChecked) {
     labelSelector.classList.add(labelClass);
     inputSelector.setAttribute('type', 'checkbox');
 
-    // section.appendChild(labelSelector);
+    section.appendChild(labelSelector);
 
-    // detectando hijos actuales de sección para poder sustituirlos
-    section.replaceChild(currentContent, labelSelector);
-    // ..................
-
-    if (itemChecked = true) {
+    if (itemChecked === true) {
         inputSelector.checked = true;
+    } else {
+        inputSelector.checked = false;
     };
+}
+
+// función que pushea tasks al array "done"
+function pushDoneTasks(taskText) {
+    const eventTaskObject = {
+        text: taskText,
+        checked: "true"
+    }
+
+    taskDone.push(eventTaskObject);
+    console.log(taskDone);
 }
 
 // SECOND functionality
 
-// generic function to change label text
-function paintingLabelNode(task, section) {
-    let newTextnode = document.createTextNode(task);
-    actualTextnode = section.lastChild;
-    section.replaceChild(newTextnode, actualTextnode);
-}
 // execute fucntion to change example label todoSection with example array task.done[0].text
 // paintingLabelNode(task.done[0].text, todoSectionLabel);
