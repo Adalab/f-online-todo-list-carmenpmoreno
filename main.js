@@ -3,21 +3,25 @@
 const task = {
     todo: [
         {
-            text: "Tarea ejemplo array.todo",
-            checked: "false"
+            text: 'Tarea ejemplo 1',
+            checked: 'false'
         }
     ],
     doing: [
         {
-            text: "Tarea ejemplo array.doig",
-            checked: "false"
+            text: 'Tarea ejemplo 2',
+            checked: 'false'
         },
+        {
+            text: 'Tarea ejemplo 3',
+            checked: 'false'
+        }
     ],
     done: [
         {
-            text: "Tarea ejemplo array.done",
-            checked: "true"
-        }
+            text: 'Tarea ejemplo 4',
+            checked: 'true'
+        },
     ],
 };
 
@@ -31,55 +35,15 @@ const todoSection = document.querySelector('.todo-section');
 const doingSection = document.querySelector('.doing-section');
 const doneSection = document.querySelector('.done-section');
 
-paintTasks(todoSection, taskTodo[0].text, 'todo-section__label', taskTodo[0].checked);
-paintTasks(doingSection, taskDoing[0].text, 'doing-section__label', taskDoing[0].checked);
-paintTasks(doneSection, taskDone[0].text, 'done-section__label', taskDone[0].checked);
-
-const allDoingSectionLabel = document.querySelectorAll('.doing-section__label');
-const allTodoSectionLabel = document.querySelectorAll('.todo-section__label');
-
-for (const doingSectionLabel of allDoingSectionLabel) {
-    doingSectionLabel.addEventListener('change', completeTaskDoing);
-};
-for (const todoSectionLabel of allTodoSectionLabel) {
-    todoSectionLabel.addEventListener('change', completeTaskTodo);
-};
-
-// First functionality: task completed checked pushed to the end of the list (html section "done")
-
-function completeTaskDoing(event) {
-    const eventText = event.currentTarget.innerText;
-
-    pushTasks(eventText, taskDone);
-    const itemChecked = true;
-    paintTasks(doneSection, eventText, 'done-section__label', itemChecked);
-
-    event.currentTarget.classList.add('hidden');
-
-    filterTaskArrays(taskDoing, doingSection, 'doing-section__label', eventText);
-
-}
-function completeTaskTodo(event) {
-    console.log('función completeTaskTodo');
-
-    const eventText = event.currentTarget.innerText;
-    const itemChecked = true
-
-    pushTasks(event.currentTarget.innerText, taskDone);
-    paintTasks(doneSection, eventText, 'done-section__label', itemChecked);
-
-    event.currentTarget.classList.add('hidden');
-    filterTaskArrays(taskTodo, todoSection, 'todo-section__label', eventText);
-}
-
-function pushTasks(taskText, taskArray) {
-    const eventTaskObject = {
-        text: taskText,
-        checked: 'true'
-    }
-    taskArray.push(eventTaskObject);
-    console.log(taskArray);
-}
+taskTodo.forEach(item =>
+    paintTasks(todoSection, item.text, 'todo-section__label', item.checked)
+);
+taskDoing.forEach(item =>
+    paintTasks(doingSection, item.text, 'doing-section__label', item.checked)
+)
+taskDone.forEach(item =>
+    paintTasks(doneSection, item.text, 'done-section__label', item.checked)
+)
 
 function paintTasks(section, node, labelClass, checked) {
 
@@ -94,47 +58,131 @@ function paintTasks(section, node, labelClass, checked) {
 
     section.appendChild(labelSelector);
 
-    if (checked === true) {
+    if (checked === 'true') {
         inputSelector.checked = true;
     } else {
         inputSelector.checked = false;
     };
 }
 
+function getListeners() {
+    const allDoingSectionLabel = document.querySelectorAll('.doing-section__label');
+    const allTodoSectionLabel = document.querySelectorAll('.todo-section__label');
+    const newAllDoneSectionLabel = document.querySelectorAll('.done-section__label');
+
+
+    for (const newDoneSectionLabel of newAllDoneSectionLabel) {
+        newDoneSectionLabel.addEventListener('change', deselectTaskDone);
+    };
+
+    for (const doingSectionLabel of allDoingSectionLabel) {
+        doingSectionLabel.addEventListener('change', completeTaskDoing);
+    };
+    for (const todoSectionLabel of allTodoSectionLabel) {
+        todoSectionLabel.addEventListener('change', completeTaskTodo);
+    };
+}
+
+getListeners();
+
+// First functionality: task completed checked pushed to the end of the list (html section "done")
+
+function completeTaskDoing(event) {
+    const eventText = event.currentTarget.innerText;
+    const itemChecked = 'true';
+
+    pushTasks(eventText, taskDone);
+    taskDone.forEach(item =>
+        item.checked = true
+    );
+
+    paintTasks(doneSection, eventText, 'done-section__label', itemChecked);
+
+    filterTaskArrays(taskDoing, doingSection, 'doing-section__label', eventText);
+    event.currentTarget.classList.add('hidden');
+
+    getListeners();
+}
+
+function completeTaskTodo(event) {
+    console.log('función completeTaskTodo');
+    const eventText = event.currentTarget.innerText;
+    const itemChecked = 'true';
+
+    event.currentTarget.classList.add('hidden');
+    // filterTaskArrays(taskTodo, todoSection, 'todo-section__label', eventText);
+    taskTodo = [];
+    console.log('taskTodo: ', taskTodo);
+
+    pushTasks(eventText, taskDone);
+    taskDone.forEach(item =>
+        item.checked = true
+    );
+
+    paintTasks(doneSection, eventText, 'done-section__label', itemChecked);
+
+    getListeners();
+}
 function filterTaskArrays(arrayTask, eventText) {
-    const taskFiltered = arrayTask
-        .filter(item => item.text !== eventText);
-    console.log('taskFiltered', taskFiltered);
+    console.log('arrayTask: ', arrayTask);
+    const newArrayTask = arrayTask.filter(item => {
+        if (item.text !== eventText) {
+            console.log('hay item distinto');
+            return true
+        } else {
+            return false
+        }
+    });
+    console.log('newArrayTask: ', newArrayTask);
+
+}
+function pushTasks(taskText, taskArray) {
+    const eventTaskObject = {
+        text: taskText,
+        checked: 'true'
+    }
+    taskArray.push(eventTaskObject);
+    console.log(taskArray);
 }
 
 // SECOND functionality: deselect task completed and push to the start of the list (html section "todo")
 
-// const newAllDoneSectionLabel = document.querySelectorAll('.done-section__label');
+function deselectTaskDone(event) {
+    console.log('función deselectTaskDone');
 
-// for (const newDoneSectionLabel of newAllDoneSectionLabel) {
-//     newDoneSectionLabel.addEventListener('click', deselectTaskDone);
-// };
-
-// function deselectTaskDone(event) {
-//     console.log('función deselectTaskDone');
-
-//     const eventText = event.currentTarget.innerText;
-//     const itemChecked = false;
-
-//     paintTasks(doingSection, taskTodo[0].text, 'doing-section__label', itemChecked);
-//     pushTasks(taskTodo[0].text, taskDoing);
-//     console.log('taskDoing', taskDoing);
-
-//     taskTodo = [];
-//     console.log('taskTodo', taskTodo);
-//     pushTasks(event.currentTarget.innerText, taskTodo);
-
-//     paintTasks(todoSection, eventText, 'todo-section__label', itemChecked);
-
-//     event.currentTarget.classList.add('hidden');
-//     filterTaskArrays(taskTodo, todoSection, 'todo-section__label', eventText);
-
-// }
+    if (!taskTodo[0]) {
+        console.log('no había nada en todo');
+    
+        pushTasks(event.currentTarget.innerText, taskTodo);
+        taskTodo[0].checked = false;
+        console.log('taskTodo', taskTodo[0].text);
+    
+        paintTasks(todoSection, taskTodo[0].text, 'todo-section__label', taskTodo[0].checked);
+        event.currentTarget.classList.add('hidden');
+    
+        getListeners();
+    } else {
+        const allTodoSectionLabel = document.querySelectorAll('.todo-section__label');
+        console.log(allTodoSectionLabel)
+        allTodoSectionLabel.forEach(item =>
+            item.classList.add('hidden')
+        );
+        paintTasks(doingSection, taskTodo[0].text, 'doing-section__label', taskTodo[0].checked);
+        pushTasks(taskTodo[0].text, taskDoing);
+        console.log('taskDoing', taskDoing);
+    
+        taskTodo = [];
+    
+        pushTasks(event.currentTarget.innerText, taskTodo);
+        taskTodo[0].checked = false;
+        console.log('taskTodo', taskTodo[0].text);
+    
+        paintTasks(todoSection, taskTodo[0].text, 'todo-section__label', taskTodo[0].checked);
+        event.currentTarget.classList.add('hidden');
+    
+        getListeners();
+    }
+}
 
 // generic function to change label text on todo
 // function paintingLabelNode(text, section) {
