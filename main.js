@@ -25,9 +25,9 @@ const task = {
     ],
 };
 
-const taskDoing = task.doing;
+let taskDoing = task.doing;
 let taskTodo = task.todo;
-const taskDone = task.done;
+let taskDone = task.done;
 
 // Paint all the example arrays
 
@@ -88,6 +88,7 @@ getListeners();
 // First functionality: task completed checked pushed to the end of the list (html section "done")
 
 function completeTaskDoing(event) {
+    console.log('función completeTaskDoing');
     const eventText = event.currentTarget.innerText;
     const itemChecked = 'true';
 
@@ -98,7 +99,10 @@ function completeTaskDoing(event) {
 
     paintTasks(doneSection, eventText, 'done-section__label', itemChecked);
 
-    filterTaskArrays(taskDoing, doingSection, 'doing-section__label', eventText);
+    const newtaskDoing = taskDoing.filter(item => item.text !== eventText);
+    console.log(newtaskDoing);
+    taskDoing = newtaskDoing;
+
     event.currentTarget.classList.add('hidden');
 
     getListeners();
@@ -123,19 +127,7 @@ function completeTaskTodo(event) {
 
     getListeners();
 }
-function filterTaskArrays(arrayTask, eventText) {
-    console.log('arrayTask: ', arrayTask);
-    const newArrayTask = arrayTask.filter(item => {
-        if (item.text !== eventText) {
-            console.log('hay item distinto');
-            return true
-        } else {
-            return false
-        }
-    });
-    console.log('newArrayTask: ', newArrayTask);
 
-}
 function pushTasks(taskText, taskArray) {
     const eventTaskObject = {
         text: taskText,
