@@ -34,6 +34,9 @@ let taskDone = task.done;
 const todoSection = document.querySelector('.todo-section');
 const doingSection = document.querySelector('.doing-section');
 const doneSection = document.querySelector('.done-section');
+const addTaskSection = document.querySelector('.add-task-hidden');
+const buttonFooter = document.querySelector('.footer__button');
+buttonFooter.addEventListener('click', handleFooterButton);
 
 taskTodo.forEach(item =>
     paintTasks(todoSection, item.text, 'todo-section__label', item.checked)
@@ -176,16 +179,13 @@ function deselectTaskDone(event) {
     }
 }
 
-// Third functionality: add modal to add new task (section hidden, to see it add class 'add-task')
+// THIRD functionality: add modal to add new task (section hidden, to see it add class 'add-task')
 
-// listener on button
-
-// handler
-
-    // add class 'add-task' to section hidden
+function handleFooterButton() {
+    addTaskSection.classList.add('add-task-opened');
+}
 
 
-    
 // generic function to change label text on todo
 // function paintingLabelNode(text, section) {
 
