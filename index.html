@@ -10,40 +10,46 @@
 </head>
 
 <body>
-    <header>
-        <img src="" alt="">
-        <p>actual date</p>
-        <h1 class="hidden">Mi lista de tareas</h1>
-    </header>
-    <main>
+    <div class="main-container">
+        <div class="task-container">
+            <header>
+                <img src="" alt="">
+                <p>actual date</p>
+                <h1 class="hidden">Mi lista de tareas</h1>
+            </header>
+            <main>
 
-        <section class="todo-section">
-            <!-- <label for="" class="todo-section__label">
+                <section class="todo-section">
+                    <!-- <label for="" class="todo-section__label">
                 <input type="checkbox">Tarea ejemplo 1</label> -->
-        </section>
+                </section>
 
-        <section class="doing-section">
-            <!-- <label for="" class="doing-section__label">
+                <section class="doing-section">
+                    <!-- <label for="" class="doing-section__label">
                 <input type="checkbox">Tarea ejemplo 2</label> -->
-        </section>
-        <section class="done-section">
-            <!-- <label for="" class="done-section__label">
+                </section>
+                <section class="done-section">
+                    <!-- <label for="" class="done-section__label">
                 <input type="checkbox" checked>Tarea ejemplo 3</label> -->
-        </section>
+                </section>
 
-        <section class="add-task">
-            <article class="add-task__modal">
-                <h2 class="modal__title">Nueva tarea</h2>
-                <label for="new-task" class="hidden"></label>
-                <input id="new-task" type="text" class="new-task" placeholder="Nueva tarea">
-
-            </article>
-        </section>
-    </main>
-    <footer>
-        <button class="footer__button">+</button>
-    </footer>
-    <script type="text/javascript" src="main.js"></script>
+                <section class="hidden">
+                    <div class="add-task__modal-container">
+                        <article class="modal">
+                            <h2 class="modal__title">Nueva tarea</h2>
+                            <label for="modal__new-task" class="hidden"></label>
+                            <input id="modal__new-task" type="text" class="new-task" placeholder="Nueva tarea">
+                            <button class="modal__button">Añadir</button>
+                        </article>
+                    </div>
+                </section>
+            </main>
+            <footer>
+                <button class="footer__button">+</button>
+            </footer>
+            <script type="text/javascript" src="main.js"></script>
+        </div>
+    </div>
 
 </body>
 
