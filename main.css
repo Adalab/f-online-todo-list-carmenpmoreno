@@ -1,11 +1,15 @@
 .todo-section {
-    border: red 2px solid;
+    /* border: red 2px solid; */
 }
 .doing-section {
-    border: rgb(197, 101, 45) 2px solid;
+    /* border: rgb(197, 101, 45) 2px solid; */
+    display: flex;
+    flex-direction: column;
 }
 .done-section {
-    border: rgb(22, 175, 22) 2px solid;
+    /* border: rgb(22, 175, 22) 2px solid; */
+    display: flex;
+    flex-direction: column;
 }
 body {
     background-image: linear-gradient(-180deg, rgb(207, 196, 209) 0%,rgb(150, 96, 212) 90%);    
