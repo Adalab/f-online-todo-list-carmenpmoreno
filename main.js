@@ -36,7 +36,12 @@ const doingSection = document.querySelector('.doing-section');
 const doneSection = document.querySelector('.done-section');
 const addTaskSection = document.querySelector('.add-task-hidden');
 const buttonFooter = document.querySelector('.footer__button');
+const buttonModal = document.querySelector('.modal__button');
+const inputModal = document.getElementById('modal__new-task');
+
 buttonFooter.addEventListener('click', handleFooterButton);
+buttonModal.addEventListener('click', handleModalButton);
+// inputModal.addEventListener('keyup', handleModalInput);
 
 taskTodo.forEach(item =>
     paintTasks(todoSection, item.text, 'todo-section__label', item.checked)
@@ -95,10 +100,7 @@ function completeTaskDoing(event) {
     const eventText = event.currentTarget.innerText;
     const itemChecked = 'true';
 
-    pushTasks(eventText, taskDone);
-    taskDone.forEach(item =>
-        item.checked = true
-    );
+    pushTasks(eventText, taskDone, 'true');
 
     paintTasks(doneSection, eventText, 'done-section__label', itemChecked);
 
@@ -121,7 +123,7 @@ function completeTaskTodo(event) {
     taskTodo = [];
     console.log('taskTodo: ', taskTodo);
 
-    pushTasks(eventText, taskDone);
+    pushTasks(eventText, taskDone, 'true');
     taskDone.forEach(item =>
         item.checked = true
     );
@@ -131,10 +133,10 @@ function completeTaskTodo(event) {
     getListeners();
 }
 
-function pushTasks(taskText, taskArray) {
+function pushTasks(taskText, taskArray, checked) {
     const eventTaskObject = {
         text: taskText,
-        checked: 'true'
+        checked: checked
     }
     taskArray.push(eventTaskObject);
     console.log(taskArray);
@@ -147,14 +149,12 @@ function deselectTaskDone(event) {
 
     if (!taskTodo[0]) {
         console.log('no había nada en todo');
-    
-        pushTasks(event.currentTarget.innerText, taskTodo);
-        taskTodo[0].checked = false;
-        console.log('taskTodo', taskTodo[0].text);
-    
+
+        pushTasks(event.currentTarget.innerText, taskTodo, 'false');
+
         paintTasks(todoSection, taskTodo[0].text, 'todo-section__label', taskTodo[0].checked);
         event.currentTarget.classList.add('hidden');
-    
+
         getListeners();
     } else {
         const allTodoSectionLabel = document.querySelectorAll('.todo-section__label');
@@ -163,18 +163,18 @@ function deselectTaskDone(event) {
             item.classList.add('hidden')
         );
         paintTasks(doingSection, taskTodo[0].text, 'doing-section__label', taskTodo[0].checked);
-        pushTasks(taskTodo[0].text, taskDoing);
+        pushTasks(taskTodo[0].text, taskDoing, 'false');
         console.log('taskDoing', taskDoing);
-    
+
         taskTodo = [];
-    
-        pushTasks(event.currentTarget.innerText, taskTodo);
+
+        pushTasks(event.currentTarget.innerText, taskTodo, 'false');
         taskTodo[0].checked = false;
         console.log('taskTodo', taskTodo[0].text);
-    
+
         paintTasks(todoSection, taskTodo[0].text, 'todo-section__label', taskTodo[0].checked);
         event.currentTarget.classList.add('hidden');
-    
+
         getListeners();
     }
 }
@@ -184,6 +184,42 @@ function deselectTaskDone(event) {
 function handleFooterButton() {
     addTaskSection.classList.add('add-task-opened');
 }
+// function handleModalInput(event) {
+//     const newTask = event.currentTarget.value;
+//     console.log(newTask);
+// };
+function handleModalButton() {
+    console.log(taskTodo);
+    if (!taskTodo[0]) {
+        console.log('no había nada en todo');
+
+        pushTasks(inputModal.value, taskTodo, 'false');
+        console.log('taskTodo', taskTodo[0].text);
+
+        paintTasks(todoSection, taskTodo[0].text, 'todo-section__label', taskTodo[0].checked);
+        addTaskSection.classList.remove('add-task-opened');
+        getListeners();
+    } else {
+        const allTodoSectionLabel = document.querySelectorAll('.todo-section__label');
+        console.log(allTodoSectionLabel)
+        allTodoSectionLabel.forEach(item =>
+            item.classList.add('hidden')
+        );
+        paintTasks(doingSection, taskTodo[0].text, 'doing-section__label', taskTodo[0].checked);
+        pushTasks(taskTodo[0].text, taskDoing, 'false');
+        console.log('taskDoing', taskDoing);
+
+        taskTodo = [];
+
+        pushTasks(inputModal.value, taskTodo, 'false');
+        console.log('taskTodo', taskTodo[0].text);
+
+        paintTasks(todoSection, taskTodo[0].text, 'todo-section__label', taskTodo[0].checked);
+        addTaskSection.classList.remove('add-task-opened');
+
+        getListeners();
+    }
+};
 
 
 // generic function to change label text on todo
