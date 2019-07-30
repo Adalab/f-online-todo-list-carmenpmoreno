@@ -16,33 +16,7 @@ let taskTodoToLs = JSON.parse(localStorage.getItem('taskTodoToLs'));
 let taskDoingToLs = JSON.parse(localStorage.getItem('taskDoingToLs'));
 let taskDoneToLs = JSON.parse(localStorage.getItem('taskDoneToLs'));
 
-// paint tasks from LocalStorage, if them exists
-
-if (taskTodoToLs === null) {
-    console.log('no hay nada en ls')
-} else {
-    taskTodo = taskTodoToLs
-    taskTodo.forEach(item =>
-        paintTasks(todoSection, item.text, 'todo-section__label', item.checked)
-    );
-}
-
-if (taskDoingToLs === null) {
-    console.log('no hay nada en ls')
-} else {
-    taskDoing = taskDoingToLs;
-    taskDoing.forEach(item =>
-        paintTasks(doingSection, item.text, 'doing-section__label', item.checked)
-    );
-}
-if (taskDoneToLs === null) {
-    console.log('no hay nada en ls')
-} else {
-    taskDone = taskDoneToLs;
-    taskDone.forEach(item =>
-        paintTasks(doneSection, item.text, 'done-section__label', item.checked)
-    );
-}
+// FUNCTIONS
 
 function paintTasks(section, node, labelClass, checked) {
 
@@ -64,14 +38,10 @@ function paintTasks(section, node, labelClass, checked) {
     };
 }
 
-buttonFooter.addEventListener('click', handleFooterButton);
-buttonModal.addEventListener('click', handleModalButton);
-
 function paintActualDate() {
     const dateContent = document.createTextNode(getActualDate());
     dateParagraph.appendChild(dateContent);
 }
-paintActualDate();
 
 function getActualDate() {
     let f = new Date();
@@ -96,7 +66,59 @@ function getTasksListeners() {
     };
 }
 
+function pushTasks(taskText, taskArray, checked) {
+
+    const eventTaskObject = {
+        text: taskText,
+        checked: checked
+    }
+    taskArray.push(eventTaskObject);
+}
+
+function paintAndKeepTodoOnDoing() {
+    const allTodoSectionLabel = document.querySelectorAll('.todo-section__label');
+    allTodoSectionLabel.forEach(item =>
+        item.classList.add('hidden')
+    );
+    paintTasks(doingSection, taskTodo[0].text, 'doing-section__label', taskTodo[0].checked);
+    pushTasks(taskTodo[0].text, taskDoing, 'false');
+    localStorage.setItem('taskDoingToLs', JSON.stringify(taskDoing));
+
+    taskTodo = [];
+    localStorage.setItem('taskTodoToLs', JSON.stringify(taskTodo));
+}
+
+// paint tasks from LocalStorage, if them exists
+
+if (taskTodoToLs === null) {
+    console.log('nothing on LS')
+} else {
+    taskTodo = taskTodoToLs
+    taskTodo.forEach(item =>
+        paintTasks(todoSection, item.text, 'todo-section__label', item.checked)
+    );
+}
+
+if (taskDoingToLs === null) {
+    console.log('nothing on LS')
+} else {
+    taskDoing = taskDoingToLs;
+    taskDoing.forEach(item =>
+        paintTasks(doingSection, item.text, 'doing-section__label', item.checked)
+    );
+}
+if (taskDoneToLs === null) {
+    console.log('nothing on LS')
+} else {
+    taskDone = taskDoneToLs;
+    taskDone.forEach(item =>
+        paintTasks(doneSection, item.text, 'done-section__label', item.checked)
+    );
+}
+
 getTasksListeners();
+
+paintActualDate();
 
 // First functionality: task completed checked pushed to the end of the list (html section "done")
 
@@ -106,7 +128,6 @@ function completeTaskDoing(event) {
     const itemChecked = 'true';
 
     if (taskDoing.find(item => item.text === eventText)) {
-        console.log('he encontrado un texto igual en el array')
         const taskDoingToLs = taskDoing.filter(item => item.text !== eventText);
         taskDoing = taskDoingToLs;
         localStorage.setItem('taskDoingToLs', JSON.stringify(taskDoingToLs));
@@ -142,15 +163,6 @@ function completeTaskTodo(event) {
     getTasksListeners();
 }
 
-function pushTasks(taskText, taskArray, checked) {
-
-    const eventTaskObject = {
-        text: taskText,
-        checked: checked
-    }
-    taskArray.push(eventTaskObject);
-}
-
 // SECOND functionality: deselect task completed and push to the start of the list (html section "todo")
 
 function deselectTaskDone(event) {
@@ -174,12 +186,15 @@ function deselectTaskDone(event) {
 
 // THIRD functionality: add modal to add new task (section hidden, to see it add class 'add-task-opened')
 
+buttonFooter.addEventListener('click', handleFooterButton);
+
 function handleFooterButton() {
     addTaskSection.classList.add('add-task-opened');
 }
 
+buttonModal.addEventListener('click', handleModalButton);
+
 function handleModalButton() {
-    console.log(taskDoing);
     if (taskTodo[0]) {
         paintAndKeepTodoOnDoing();
     };
@@ -190,17 +205,3 @@ function handleModalButton() {
     addTaskSection.classList.remove('add-task-opened');
     getTasksListeners();
 };
-
-function paintAndKeepTodoOnDoing() {
-    const allTodoSectionLabel = document.querySelectorAll('.todo-section__label');
-    allTodoSectionLabel.forEach(item =>
-        item.classList.add('hidden')
-    );
-    paintTasks(doingSection, taskTodo[0].text, 'doing-section__label', taskTodo[0].checked);
-    pushTasks(taskTodo[0].text, taskDoing, 'false');
-    localStorage.setItem('taskDoingToLs', JSON.stringify(taskDoing));
-
-    taskTodo = [];
-    localStorage.setItem('taskTodoToLs', JSON.stringify(taskTodo));
-}
-
